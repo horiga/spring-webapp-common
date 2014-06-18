@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+  	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+  	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		">
+	
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	
+	<bean id="ds.default" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<!-- default properties -->
+		<property name="driverClassName" value="${ds.default.driverClassName}" />
+		<property name="initialSize" value="${ds.default.initialSize}" />
+		<property name="maxActive" value="${ds.default.maxActive}" />
+		<property name="minIdle" value="${ds.default.minIdle}" />
+		<property name="maxIdle" value="${ds.default.maxIdle}" />
+		<property name="maxWait" value="${ds.default.maxWait}" />
+		<!-- <property name="validationQuery" value="${ds.default.validationQuery}" /> -->
+		<property name="validationQuery" value="/* ping */ select 1" />
+		<property name="testOnBorrow" value="${ds.default.testOnBorrow}" />
+		<property name="testOnReturn" value="${ds.default.testOnReturn}" />
+		<property name="testWhileIdle" value="${ds.default.testWhileIdle}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${ds.default.timeBetweenEvictionRunsMillis}" />
+		<property name="numTestsPerEvictionRun" value="${ds.default.numTestsPerEvictionRun}" />
+		<property name="minEvictableIdleTimeMillis" value="${ds.default.minEvictableIdleTimeMillis}" />
+		<!-- your database configurations -->
+		<property name="url" value="${ds.default.url}" />
+		<property name="username" value="${ds.default.username}" />
+		<property name="password" value="${ds.default.password}" />
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="ds.default" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+</beans>
